@@ -1,9 +1,9 @@
-package Jacob;
+package mad;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import Jacob.Sorts.*;
+import mad.Sorts.*;
 
 public class SortingVisualizer {
 

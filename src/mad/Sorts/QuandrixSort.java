@@ -1,6 +1,6 @@
-package Jacob.Sorts;
+package mad.Sorts;
 
-import Jacob.SortingVisualizer;
+import mad.SortingVisualizer;
 
 public class QuandrixSort implements Runnable{
 

@@ -1,9 +1,9 @@
-package Jacob.Sorts;
+package mad.Sorts;
 
 import java.util.ArrayList;
 
-import Jacob.SortingVisualizer;
-import Jacob.VisualizerFrame;
+import mad.SortingVisualizer;
+import mad.VisualizerFrame;
 
 public class RadixSort implements Runnable{
 	

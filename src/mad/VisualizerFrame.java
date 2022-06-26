@@ -1,4 +1,4 @@
-package Jacob;
+package mad;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

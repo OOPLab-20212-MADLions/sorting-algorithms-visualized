@@ -1,6 +1,6 @@
-package Jacob.Sorts;
+package mad.Sorts;
 
-import Jacob.*;
+import mad.*;
 
 public class GnomeSort implements Runnable{
 	
