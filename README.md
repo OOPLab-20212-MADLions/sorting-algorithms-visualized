@@ -1,15 +1,24 @@
 # MAD LIONS SORTING ALGORITHMS VISUALIZED
 
-## Object-oriented Programming - 131099 - 20212
+## Contributors
 
-- Mai Anh Đức - 20194740
-- Vũ Phạm Việt Hoàng - 2019
-- Đinh Ngọc Khuê -
-- Trần Phúc Thành - 20194846
+| Student            | ID       |
+| ------------------ | -------- |
+| Mai Anh Đức        | 20194740 |
+| Vũ Phạm Việt Hoàng | 20194771 |
+| Đinh Ngọc Khuê     | 20194782 |
+| Trần Phúc Thành    | 20194846 |
 
 ## Overview
 
-The project includes:
+**Course:**
+
+- Object-Oriented Language and Theory (Java)
+- Lecturer: TS. Trần Nhật Hoá
+- Course ID: _IT3102E_
+- Class ID: _131098_ (Theory) - _131099_ (Laboratory)
+
+**The project includes:**
 
 - Bubble sort
 - Selection sort
