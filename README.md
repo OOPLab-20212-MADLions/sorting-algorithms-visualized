@@ -7,8 +7,6 @@
 - Đinh Ngọc Khuê -
 - Trần Phúc Thành - 20194846
 
----
-
 ## Overview
 
 The project includes:
@@ -17,8 +15,6 @@ The project includes:
 - Selection sort
 - Merge sort
 - Bucket sort
-
----
 
 ## Usage
 
