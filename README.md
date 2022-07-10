@@ -18,4 +18,10 @@ The project includes:
 
 ## Usage
 
+### Bubble, Selection & Merge Sort UI
+
 ![alt text](./src/mad/overview.jpg)
+
+### Bucket Sort UI
+
+![alt text](./src/mad/bucket.jpg)
