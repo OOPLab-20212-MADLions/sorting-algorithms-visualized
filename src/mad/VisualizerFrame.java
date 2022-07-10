@@ -27,11 +27,11 @@ public class VisualizerFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private final int NULL_ELEMENT 	= -1; 
-	private final int MAX_SPEED 	= 1000;
-	private final int MIN_SPEED 	= 1;
-	private final int DEFAULT_SPEED = 50;
+	private final int MAX_DELAY 	= 1000;
+	private final int MIN_DELAY		= 1;
+	private final int DEFAULT_DELAY = 50;
 	
-	private final int MAX_SIZE 		= 500;
+	private final int MAX_SIZE 		= 300;
 	private final int MIN_SIZE 		= 1;
 	private final int DEFAULT_SIZE 	= 40;
 
@@ -45,9 +45,9 @@ public class VisualizerFrame extends JFrame {
 	private JPanel[] 			pillar;
 	public	JButton 			start;
 	private JComboBox<String> 	selection;
-	private JSlider 			speed;
+	private JSlider 			delay;
 	public  JSlider 			size;
-	private JLabel 				speedVal;
+	private JLabel 				delayVal;
 	private JLabel 				sizeVal;
 	private GridBagConstraints 	c;
 
@@ -64,9 +64,9 @@ public class VisualizerFrame extends JFrame {
 
 		selection 	= new JComboBox<String>();
 		start 		= new JButton("Start");
-		speed 		= new JSlider(MIN_SPEED, MAX_SPEED, DEFAULT_SPEED);
+		delay 		= new JSlider(MIN_DELAY, MAX_DELAY, DEFAULT_DELAY);
 		size 		= new JSlider(MIN_SIZE, MAX_SIZE, DEFAULT_SIZE);
-		speedVal 	= new JLabel("Speed: 50 ms");
+		delayVal 	= new JLabel("Speed: 50 ms");
 		sizeVal 	= new JLabel("Size: 40 values");
 
 		start.setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 30, 10, 30)));
@@ -78,23 +78,23 @@ public class VisualizerFrame extends JFrame {
 		selection.setBackground(Color.BLACK);
 		selection.setForeground(Color.WHITE);
 
-		speed.setBorder(new EmptyBorder(10, 30, 10, 30));
-		speed.setPaintTicks(false);
+		delay.setBorder(new EmptyBorder(10, 30, 10, 30));
+		delay.setPaintTicks(false);
 		
-		speedVal.setForeground(Color.WHITE);
+		delayVal.setForeground(Color.WHITE);
 		
 		size.setPaintTicks(false);
 		size.setBorder(new EmptyBorder(10, 30, 10, 30));
 
 		sizeVal.setForeground(Color.WHITE);
 		size.setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 50, 10, 10)));
-
-		left.add(speedVal);
-		left.add(speed);
-		left.add(sizeVal);
-		left.add(size);
+		
 		left.add(start);
 		left.add(selection);
+		left.add(delayVal);
+		left.add(delay);
+		left.add(sizeVal);
+		left.add(size);
 
 		// RIGHT CONTAINER --------------------------------------------------------------
 		right = new JPanel();
@@ -140,26 +140,26 @@ public class VisualizerFrame extends JFrame {
 			}
 		});
 
-		speed.addChangeListener(new ChangeListener() {
+		delay.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				speedVal.setText(("Speed: " + Integer.toString(speed.getValue()) + "ms"));
+				delayVal.setText(("Delay: " + Integer.toString(delay.getValue()) + "ms"));
 				validate();
-				SortingVisualizer.sleep = speed.getValue();
+				SortingVisualizer.sleep = delay.getValue();
 			}
 		});
-
+		
 		setExtendedState(JFrame.MAXIMIZED_BOTH );
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	public void initArray(Integer[] squares){
+	public void initArray(Integer[] elements){
 		pillar = new JPanel[SortingVisualizer.numberOfElements];
 		right.removeAll();
-		pillarHeight =  (int) ((getHeight()*0.7)/(pillar.length));
+		pillarHeight =  (int) ((getHeight() * 0.7) / (pillar.length));
 		for(int i = 0; i < SortingVisualizer.numberOfElements; i++){
 			pillar[i] = new JPanel();
-			pillar[i].setPreferredSize(new Dimension(SortingVisualizer.pillarWidth, squares[i] * pillarHeight));
+			pillar[i].setPreferredSize(new Dimension(SortingVisualizer.pillarWidth, elements[i] * pillarHeight));
 			pillar[i].setBackground(Color.green);
 			right.add(pillar[i], c);
 		}
@@ -167,23 +167,15 @@ public class VisualizerFrame extends JFrame {
 		validate();
 	}
 
-	public void arraySwitch(Integer[] x){
-		arraySwitch(x, NULL_ELEMENT);
+	public void arraySwitch(Integer[] elements, int currentElement, int comparingElement){
+		arraySwitch(elements, currentElement, comparingElement, NULL_ELEMENT);
 	}
 
-	public void arraySwitch(Integer[] x, int y){
-		arraySwitch(x, y, NULL_ELEMENT);
-	}
-
-	public void arraySwitch(Integer[] x, int y, int z){
-		arraySwitch(x, y, z, NULL_ELEMENT);
-	}
-
-	public void arraySwitch(Integer[] squares, int currentElement, int comparingElement, int reading){
+	public void arraySwitch(Integer[] elements, int currentElement, int comparingElement, int reading){
 		right.removeAll();
 		for(int i = 0; i < pillar.length; i++){
 			pillar[i] = new JPanel();
-			pillar[i].setPreferredSize(new Dimension(SortingVisualizer.pillarWidth, squares[i] * pillarHeight));
+			pillar[i].setPreferredSize(new Dimension(SortingVisualizer.pillarWidth, elements[i] * pillarHeight));
 			if (i == currentElement){
 				pillar[i].setBackground(Color.blue);
 			}else if(i == comparingElement){

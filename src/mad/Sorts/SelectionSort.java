@@ -39,7 +39,6 @@ public class SelectionSort implements Runnable {
 			arr[i] = arr[selected];
 			arr[selected] = temp;
 		}
-		frame.arraySwitch(arr);
 	}
 
 }

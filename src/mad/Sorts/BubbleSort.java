@@ -6,8 +6,8 @@ public class BubbleSort implements Runnable {
 	private Integer[] arr;
 	private VisualizerFrame frame;
 	
-	public BubbleSort(Integer[] toBeSorted, VisualizerFrame frame) {
-		this.arr = toBeSorted;
+	public BubbleSort(Integer[] arr, VisualizerFrame frame) {
+		this.arr = arr;
 		this.frame = frame;
 	}
 	

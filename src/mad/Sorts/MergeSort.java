@@ -12,44 +12,43 @@ public class MergeSort implements Runnable {
 		SortingVisualizer.frame.start.setText("Start");
 	}
 	
-	public void mergeSort(Integer[] x) { 
-		mergeSort (x, 0, x.length - 1); 
+	public void mergeSort(Integer[] arr) { 
+		mergeSort (arr, 0, arr.length - 1); 
 	}
 
-	private void mergeSort(Integer[] x, int first, int last) {
-      int mid, lt, rt;
-      int tmp;
+	private void mergeSort(Integer[] arr, int first, int last) {
+      int m, l, r;
+      int temp;
 
       if (first >= last) {
     	  return;  
       }
       
-      mid = (first + last) / 2;
+      m = (first + last) / 2;
 
-      mergeSort(x, first, mid);
-      mergeSort(x, mid + 1, last);
+      mergeSort(arr, first, m);
+      mergeSort(arr, m + 1, last);
 
-      lt = first;  rt = mid + 1;
+      l = first;  
+      r = m + 1;
       
-      if ( x[mid] <= x[rt]) {
+      if (arr[m] <= arr[r]) {
     	  return; 
       }
          
-      while (lt <= mid && rt <= last) {
-         if ( x[lt] <= x[rt]) {
-        	 lt++; 
+      while (l <= m && r <= last) {
+         if (arr[l] <= arr[r]) {
+        	 l++; 
          }            
          else {
-            tmp = x[rt];     
-            for (int i = rt - lt; i > 0; i--){
-            	x[lt + i] = x[lt + i-1];
+            temp = arr[r];     
+            for (int i = r - l; i > 0; i--){
+            	arr[l + i] = arr[l + i - 1];
             }
-            x[lt] = tmp;
-            lt++;  
-            mid++;  
-            rt++;
+            arr[l] = temp;
+            l++; m++; r++;
          }
-         SortingVisualizer.frame.arraySwitch(x, mid, rt, lt);
+         SortingVisualizer.frame.arraySwitch(arr, m, r, l);
 			try {
 				Thread.sleep(SortingVisualizer.sleep);
 			} catch (InterruptedException e) {

@@ -21,9 +21,9 @@ public class SortingVisualizer {
 			return; 
 		} else {
 			arr = new Integer[numberOfElements];
-			pillarWidth = (int) Math.max(Math.ceil(500/numberOfElements), 1);
+			pillarWidth = (int) Math.max(Math.ceil(700/numberOfElements), 1);
 			for (int i = 0; i < arr.length; i++) {
-				arr[i] = (int) (numberOfElements * Math.random());
+				arr[i] = (int) (numberOfElements * Math.random() + 1);
 			}
 			frame.initArray(arr);
 		}
