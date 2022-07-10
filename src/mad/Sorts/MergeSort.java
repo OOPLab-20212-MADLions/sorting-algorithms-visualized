@@ -2,19 +2,21 @@ package mad.Sorts;
 
 import mad.SortingVisualizer;
 
-public class MergeSort implements Runnable{
+public class MergeSort implements Runnable {
 	
 	public void run() {
 		Integer[] arr = SortingVisualizer.arr;
-		inPlaceSort(arr);
+		mergeSort(arr);
 		SortingVisualizer.isSorting = false;
 		SortingVisualizer.frame.size.setEnabled(true);
 		SortingVisualizer.frame.start.setText("Start");
 	}
-	public void inPlaceSort(Integer[] x)
-	   { inPlaceSort (x, 0, x.length - 1); }
+	
+	public void mergeSort(Integer[] x) { 
+		mergeSort (x, 0, x.length - 1); 
+	}
 
-   private void inPlaceSort(Integer[] x, int first, int last) {
+	private void mergeSort(Integer[] x, int first, int last) {
       int mid, lt, rt;
       int tmp;
 
@@ -24,10 +26,10 @@ public class MergeSort implements Runnable{
       
       mid = (first + last) / 2;
 
-      inPlaceSort(x, first, mid);
-      inPlaceSort(x, mid + 1, last);
+      mergeSort(x, first, mid);
+      mergeSort(x, mid + 1, last);
 
-      lt = first;  rt = mid+1;
+      lt = first;  rt = mid + 1;
       
       if ( x[mid] <= x[rt]) {
     	  return; 
@@ -47,7 +49,7 @@ public class MergeSort implements Runnable{
             mid++;  
             rt++;
          }
-         SortingVisualizer.frame.reDrawArray(x, mid, rt, lt);
+         SortingVisualizer.frame.arraySwitch(x, mid, rt, lt);
 			try {
 				Thread.sleep(SortingVisualizer.sleep);
 			} catch (InterruptedException e) {

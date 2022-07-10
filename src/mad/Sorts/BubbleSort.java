@@ -2,7 +2,7 @@ package mad.Sorts;
 
 import mad.*;
 
-public class BubbleSort implements Runnable{
+public class BubbleSort implements Runnable {
 	private Integer[] arr;
 	private VisualizerFrame frame;
 	
@@ -30,7 +30,7 @@ public class BubbleSort implements Runnable{
 					arr[j]= temp;
 					swapped = true;
 				}
-				frame.reDrawArray(arr, j, j + 1);
+				frame.arraySwitch(arr, j, j + 1);
 				try {
 					Thread.sleep(SortingVisualizer.sleep);
 				} catch (InterruptedException e) {

@@ -2,13 +2,13 @@ package mad.Sorts;
 
 import mad.*;
 
-public class SelectionSort implements Runnable{
+public class SelectionSort implements Runnable {
 	
-	private Integer[] toBeSorted;
+	private Integer[] arr;
 	private VisualizerFrame frame;
 	
 	public SelectionSort(Integer[] toBeSorted, VisualizerFrame frame) {
-		this.toBeSorted = toBeSorted;
+		this.arr = toBeSorted;
 		this.frame = frame;
 	}
 	
@@ -22,24 +22,24 @@ public class SelectionSort implements Runnable{
 	public void sort() {
 		int temp = 0;
 		int selected = 0;
-		for (int i = 0; i < toBeSorted.length; i++){
+		for (int i = 0; i < arr.length; i++){
 			selected = i;
-			for(int j = toBeSorted.length - 1; j > i; j--){
-				if (toBeSorted[j] <= toBeSorted[selected]){
+			for(int j = arr.length - 1; j > i; j--){
+				if (arr[j] <= arr[selected]){
 					selected = j;
 				}
-				frame.reDrawArray(toBeSorted, selected, j - 1);
+				frame.arraySwitch(arr, selected, j - 1);
 				try {
 					Thread.sleep(SortingVisualizer.sleep);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}				
 			}
-			temp = toBeSorted[i];
-			toBeSorted[i] = toBeSorted[selected];
-			toBeSorted[selected] = temp;
+			temp = arr[i];
+			arr[i] = arr[selected];
+			arr[selected] = temp;
 		}
-		frame.reDrawArray(toBeSorted);
+		frame.arraySwitch(arr);
 	}
 
 }

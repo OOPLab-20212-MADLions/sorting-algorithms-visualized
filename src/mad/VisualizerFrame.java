@@ -26,6 +26,7 @@ import javax.swing.event.ChangeListener;
 public class VisualizerFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
+	private final int NULL_ELEMENT 	= -1; 
 	private final int MAX_SPEED 	= 1000;
 	private final int MIN_SPEED 	= 1;
 	private final int DEFAULT_SPEED = 50;
@@ -34,14 +35,14 @@ public class VisualizerFrame extends JFrame {
 	private final int MIN_SIZE 		= 1;
 	private final int DEFAULT_SIZE 	= 40;
 
-	private final String[] Sorts = {"Bubble Sort", "Selection Sort", "Merge Sort"};
+	private final String[] Sorts 	= { "Bubble Sort", "Selection Sort", "Merge Sort" };
 
 	private int pillarHeight;
 
 	private JPanel 				wrapper;
-	private JPanel 				right;
 	private JPanel 				left;
-	private JPanel[] 			squarePanels;
+	private JPanel 				right;
+	private JPanel[] 			pillar;
 	public	JButton 			start;
 	private JComboBox<String> 	selection;
 	private JSlider 			speed;
@@ -135,7 +136,7 @@ public class VisualizerFrame extends JFrame {
 			public void stateChanged(ChangeEvent arg0) {
 				sizeVal.setText(("Size: " + Integer.toString(size.getValue()) + " values"));
 				validate();
-				SortingVisualizer.sortDataCount = size.getValue();
+				SortingVisualizer.numberOfElements = size.getValue();
 			}
 		});
 
@@ -152,50 +153,47 @@ public class VisualizerFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	// preDrawArray reinitializes the array of panels that represent the values. They are set based on the size of the window.
-	public void preDrawArray(Integer[] squares){
-		squarePanels = new JPanel[SortingVisualizer.sortDataCount];
+	public void initArray(Integer[] squares){
+		pillar = new JPanel[SortingVisualizer.numberOfElements];
 		right.removeAll();
-		// 70% of the windows height, divided by the size of the sorted array.
-		pillarHeight =  (int) ((getHeight()*0.7)/(squarePanels.length));
-		for(int i = 0; i < SortingVisualizer.sortDataCount; i++){
-			squarePanels[i] = new JPanel();
-			squarePanels[i].setPreferredSize(new Dimension(SortingVisualizer.blockWidth, squares[i] * pillarHeight));
-			squarePanels[i].setBackground(Color.green);
-			right.add(squarePanels[i], c);
+		pillarHeight =  (int) ((getHeight()*0.7)/(pillar.length));
+		for(int i = 0; i < SortingVisualizer.numberOfElements; i++){
+			pillar[i] = new JPanel();
+			pillar[i].setPreferredSize(new Dimension(SortingVisualizer.pillarWidth, squares[i] * pillarHeight));
+			pillar[i].setBackground(Color.green);
+			right.add(pillar[i], c);
 		}
 		repaint();
 		validate();
 	}
 
-	public void reDrawArray(Integer[] x){
-		reDrawArray(x, -1);
+	public void arraySwitch(Integer[] x){
+		arraySwitch(x, NULL_ELEMENT);
 	}
 
-	public void reDrawArray(Integer[] x, int y){
-		reDrawArray(x, y, -1);
+	public void arraySwitch(Integer[] x, int y){
+		arraySwitch(x, y, NULL_ELEMENT);
 	}
 
-	public void reDrawArray(Integer[] x, int y, int z){
-		reDrawArray(x, y, z, -1);
+	public void arraySwitch(Integer[] x, int y, int z){
+		arraySwitch(x, y, z, NULL_ELEMENT);
 	}
 
-	// reDrawArray does similar to preDrawArray except it does not reinitialize the panel array.
-	public void reDrawArray(Integer[] squares, int working, int comparing, int reading){
+	public void arraySwitch(Integer[] squares, int currentElement, int comparingElement, int reading){
 		right.removeAll();
-		for(int i = 0; i < squarePanels.length; i++){
-			squarePanels[i] = new JPanel();
-			squarePanels[i].setPreferredSize(new Dimension(SortingVisualizer.blockWidth, squares[i] * pillarHeight));
-			if (i == working){
-				squarePanels[i].setBackground(Color.blue);
-			}else if(i == comparing){
-				squarePanels[i].setBackground(Color.red);
+		for(int i = 0; i < pillar.length; i++){
+			pillar[i] = new JPanel();
+			pillar[i].setPreferredSize(new Dimension(SortingVisualizer.pillarWidth, squares[i] * pillarHeight));
+			if (i == currentElement){
+				pillar[i].setBackground(Color.blue);
+			}else if(i == comparingElement){
+				pillar[i].setBackground(Color.red);
 			}else if(i == reading){
-				squarePanels[i].setBackground(Color.white);
+				pillar[i].setBackground(Color.white);
 			}else{
-				squarePanels[i].setBackground(Color.green);
+				pillar[i].setBackground(Color.green);
 			}
-			right.add(squarePanels[i], c);
+			right.add(pillar[i], c);
 		}
 		repaint();
 		validate();
