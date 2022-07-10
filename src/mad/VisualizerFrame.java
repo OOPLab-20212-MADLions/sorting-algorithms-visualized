@@ -41,8 +41,8 @@ public class VisualizerFrame extends JFrame {
 	private int pillarHeight;
 
 	private JPanel 				wrapper;
-	private JPanel 				left;
-	private JPanel 				right;
+	private JPanel 				top;
+	private JPanel 				bottom;
 	private JPanel[] 			pillar;
 	public	JButton 			start;
 	public	JComboBox<String> 	selection;
@@ -58,10 +58,10 @@ public class VisualizerFrame extends JFrame {
 		buttonWrapperTitle.setTitleJustification(TitledBorder.CENTER);
 		buttonWrapperTitle.setTitleColor(Color.WHITE);
 		
-		left = new JPanel();
-		left.setLayout(new FlowLayout());
-		left.setBackground(Color.BLACK);
-		left.setBorder(new CompoundBorder(buttonWrapperTitle, new EmptyBorder(10, 10, 10, 10)));
+		top = new JPanel();
+		top.setLayout(new FlowLayout());
+		top.setBackground(Color.BLACK);
+		top.setBorder(new CompoundBorder(buttonWrapperTitle, new EmptyBorder(10, 10, 10, 10)));
 
 		selection 	= new JComboBox<String>();
 		start 		= new JButton("Start");
@@ -80,32 +80,30 @@ public class VisualizerFrame extends JFrame {
 		selection.setForeground(Color.WHITE);
 
 		delay.setBorder(new EmptyBorder(10, 30, 10, 30));
-		delay.setPaintTicks(false);
 		
 		delayVal.setForeground(Color.WHITE);
 		
-		size.setPaintTicks(false);
-		size.setBorder(new EmptyBorder(10, 30, 10, 30));
+		size.setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 50, 10, 10)));
 
 		sizeVal.setForeground(Color.WHITE);
-		size.setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 50, 10, 10)));
 		
-		left.add(delayVal);
-		left.add(delay);
-		left.add(selection);
-		left.add(sizeVal);
-		left.add(size);
+		
+		top.add(delayVal);
+		top.add(delay);
+		top.add(selection);
+		top.add(sizeVal);
+		top.add(size);
 
-		// RIGHT CONTAINER --------------------------------------------------------------
-		right = new JPanel();
-		right.setLayout(new GridBagLayout());
-		right.setBorder(new EmptyBorder(10, 40, 10, 10));
-		right.setBackground(Color.BLACK);
+		// BOTTOM CONTAINER --------------------------------------------------------------
+		bottom = new JPanel();
+		bottom.setLayout(new GridBagLayout());
+		bottom.setBorder(new EmptyBorder(10, 40, 10, 10));
+		bottom.setBackground(Color.BLACK);
 				
 		TitledBorder arrayWrapperTitle = BorderFactory.createTitledBorder("SORTING AREA");
 		arrayWrapperTitle.setTitleJustification(TitledBorder.CENTER);
 		arrayWrapperTitle.setTitleColor(Color.WHITE);
-		right.setBorder(new CompoundBorder(arrayWrapperTitle , new EmptyBorder(10, 10, 10, 10)));
+		bottom.setBorder(new CompoundBorder(arrayWrapperTitle , new EmptyBorder(10, 10, 10, 10)));
 		
 		c 		 = new GridBagConstraints();
 		c.insets = new Insets(0, 1, 0, 1);
@@ -113,14 +111,14 @@ public class VisualizerFrame extends JFrame {
 		
 		// WRAPPER ----------------------------------------------------------------------
 		wrapper = new JPanel();
-//		wrapper.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		wrapper.setLayout(new BorderLayout());
 		wrapper.setBorder(new EmptyBorder(20, 20, 20, 20));
 		wrapper.setBackground(Color.BLACK);
 		
-		wrapper.add(left, BorderLayout.NORTH);
-		wrapper.add(right, BorderLayout.CENTER);	
+		wrapper.add(top, BorderLayout.NORTH);
+		wrapper.add(bottom, BorderLayout.CENTER);	
 		wrapper.add(start, BorderLayout.SOUTH);
+		
 		add(wrapper);
 		this.setTitle("MAD Lions' Sorting Algorithms Visualization");
 		
@@ -158,13 +156,13 @@ public class VisualizerFrame extends JFrame {
 
 	public void initArray(Integer[] elements){
 		pillar = new JPanel[SortingVisualizer.numberOfElements];
-		right.removeAll();
+		bottom.removeAll();
 		pillarHeight =  (int) ((getHeight() * 0.5) / (pillar.length));
 		for(int i = 0; i < SortingVisualizer.numberOfElements; i++){
 			pillar[i] = new JPanel();
 			pillar[i].setPreferredSize(new Dimension(SortingVisualizer.pillarWidth, elements[i] * pillarHeight));
 			pillar[i].setBackground(Color.green);
-			right.add(pillar[i], c);
+			bottom.add(pillar[i], c);
 		}
 		repaint();
 		validate();
@@ -175,7 +173,7 @@ public class VisualizerFrame extends JFrame {
 	}
 
 	public void arraySwitch(Integer[] elements, int currentElement, int comparingElement, int reading){
-		right.removeAll();
+		bottom.removeAll();
 		for(int i = 0; i < pillar.length; i++){
 			pillar[i] = new JPanel();
 			pillar[i].setPreferredSize(new Dimension(SortingVisualizer.pillarWidth, elements[i] * pillarHeight));
@@ -188,7 +186,7 @@ public class VisualizerFrame extends JFrame {
 			}else{
 				pillar[i].setBackground(Color.green);
 			}
-			right.add(pillar[i], c);
+			bottom.add(pillar[i], c);
 		}
 		repaint();
 		validate();

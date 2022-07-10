@@ -3,155 +3,187 @@ package mad.Sorts.BucketSort;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-@SuppressWarnings("serial")
 public class VisualizerFrame extends JFrame {
-	// Speed
-	private final int MAX_SPEED = 1000;
-	private final int MIN_SPEED = 1;
-	private final int DEFAULT_SPEED = 20;
-	// Size
-	private final int MAX_SIZE = 100;
-	private final int MIN_SIZE = 1;
-	private final int DEFAULT_SIZE = 20;
+	private static final long serialVersionUID = 1L;
 
-	private JPanel wrapper;
-	private JPanel arrayWrapper;
-	private JPanel[] bucketWrapper;
-	private JPanel buttonWrapper;
-	private JPanel allBucketWrapper;
-	private JPanel[] squarePanels;
-	private JPanel[] bucketPanels;
-	private JPanel[][] bucketArray;
-	private JButton start;
-	private JSlider speed;
-	private JSlider size;
-	private JLabel speedVal;
-	private JLabel sizeVal;
-	private GridBagConstraints c;
+	private final int NULL_ELEMENT 	= -1; 
+	private final int MAX_DELAY 	= 1000;
+	private final int MIN_DELAY 	= 1;
+	private final int DEFAULT_DELAY = 20;
+	
+	private final int MAX_SIZE 		= 100;
+	private final int MIN_SIZE 		= 1;
+	private final int DEFAULT_SIZE 	= 20;
+
+	private JPanel 				wrapper;
+	private JPanel 				top;
+	private JPanel 				bottom;
+	private JPanel[] 			bucketWrapper;
+	private JPanel 				allBucketWrapper;
+	private JPanel[] 			pillar;
+	private JPanel[] 			bucketPanels;
+	private JPanel[][] 			bucketArray;
+	public 	JButton 			start;
+	private JSlider 			delay;
+	public 	JSlider 			size;
+	private JLabel 				delayVal;
+	private JLabel 				sizeVal;
+	private GridBagConstraints 	c;
 
 	public VisualizerFrame(){
-		super("Sorting Visualizer");
+		// TOP CONTAINER -----------------------------------------------------------------------
+		TitledBorder buttonWrapperTitle = BorderFactory.createTitledBorder("FUNCTIONAL AREA");
+		buttonWrapperTitle.setTitleJustification(TitledBorder.CENTER);
+		buttonWrapperTitle.setTitleColor(Color.WHITE);
 
-		start = new JButton("Start");
-		buttonWrapper = new JPanel();
-		arrayWrapper = new JPanel();
-		wrapper = new JPanel();
+		top = new JPanel();
+		top.setLayout(new FlowLayout());
+		top.setBorder(new CompoundBorder(buttonWrapperTitle, new EmptyBorder(10, 10, 10, 10)));
+		top.setBackground(Color.BLACK);
 		
+		start 		= new JButton("Start");
+		delay 		= new JSlider(MIN_DELAY, MAX_DELAY, DEFAULT_DELAY);
+		size 		= new JSlider(MIN_SIZE, MAX_SIZE, DEFAULT_SIZE);
+		delayVal 	= new JLabel("Delay: 20 ms");
+		sizeVal 	= new JLabel("Size: 20 values");
+		
+		start.setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 30, 10, 30)));
+		start.setBackground(Color.BLACK);
+		start.setForeground(Color.WHITE);
+		
+		delay.setBorder(new EmptyBorder(10, 30, 10, 30));
+		
+		delayVal.setForeground(Color.WHITE);
+
+		size.setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 50, 10, 10)));
+
+		sizeVal.setForeground(Color.WHITE);
+		
+		top.add(start);
+		top.add(delayVal);
+		top.add(delay);
+		top.add(sizeVal);
+		top.add(size);
+
+		// BOTTOM CONTAINER --------------------------------------------------------------
+		bottom = new JPanel();
+		bottom.setLayout(new GridLayout(2, 60, 5, 5));
+		bottom.setBorder(new EmptyBorder(10, 40, 10, 10));
+		bottom.setBackground(Color.BLACK);
+		
+		TitledBorder arrayWrapperTitle = BorderFactory.createTitledBorder("SORTING ARRAY");
+		arrayWrapperTitle.setTitleJustification(TitledBorder.CENTER);
+		arrayWrapperTitle.setTitleColor(Color.WHITE);
+		bottom.setBorder(new CompoundBorder(arrayWrapperTitle , new EmptyBorder(10, 10, 10, 10)));
+		
+		c 		 = new GridBagConstraints();
+		c.insets = new Insets(10, 5, 10, 5);
+		c.anchor = GridBagConstraints.SOUTH;	
+		
+		// WRAPPER ----------------------------------------------------------------------
 		allBucketWrapper = new JPanel();
-		
-		speed = new JSlider(MIN_SPEED, MAX_SPEED, DEFAULT_SPEED);
-		size = new JSlider(MIN_SIZE, MAX_SIZE, DEFAULT_SIZE);
-		speedVal = new JLabel("Speed: 20 ms");
-		sizeVal = new JLabel("Size: 20 values");
-		c = new GridBagConstraints();
+		allBucketWrapper.setBackground(Color.BLACK);
 
-		arrayWrapper.setLayout(new GridLayout(2, 60, 5, 5));
+		wrapper = new JPanel();
 		wrapper.setLayout(new BorderLayout());
+		wrapper.setBorder(new EmptyBorder(20, 20, 20, 20));
+		wrapper.setBackground(Color.BLACK);
 		
-		c.insets = new Insets(10,5,10,5);
-		c.anchor = GridBagConstraints.SOUTH;
+		wrapper.add(top, BorderLayout.NORTH);
+		wrapper.add(allBucketWrapper, BorderLayout.CENTER);
+		wrapper.add(bottom, BorderLayout.SOUTH);
+		
+		add(wrapper);
+		this.setTitle("MAD Lions' Bucket Sort Visualization");
 
+		// ACTION LISTENERS --------------------------------------------------------------
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				arrayWrapper.removeAll();
+				bottom.removeAll();
 				allBucketWrapper.removeAll();
 				BucketSortingVisualizer.startSort();
+				size.setEnabled(false);
 			}
 		});
 
-		speed.setMinorTickSpacing(10);
-		speed.setMajorTickSpacing(100);
-		speed.setPaintTicks(true);
-
-		speed.addChangeListener(new ChangeListener() {
+		delay.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				speedVal.setText(("Speed: " + Integer.toString(speed.getValue()) + "ms"));
+				delayVal.setText(("Delay: " + Integer.toString(delay.getValue()) + "ms"));
 				validate();
-				BucketSortingVisualizer.sleep = speed.getValue();
+				BucketSortingVisualizer.sleep = delay.getValue();
 			}
 		});
-
-		size.setMinorTickSpacing(5);
-		size.setMajorTickSpacing(10);
-		size.setPaintTicks(true);
 
 		size.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				sizeVal.setText(("Size: " + Integer.toString(size.getValue()) + " values"));
 				validate();
-				BucketSortingVisualizer.sortDataCount = size.getValue();
+				BucketSortingVisualizer.numberOfElements = size.getValue();
 			}
 		});
-
-		buttonWrapper.add(speedVal);
-		buttonWrapper.add(speed);
-		buttonWrapper.add(sizeVal);
-		buttonWrapper.add(size);
-		buttonWrapper.add(start);
-
 		
-		wrapper.add(buttonWrapper, BorderLayout.SOUTH);
-		wrapper.add(allBucketWrapper);
-		wrapper.add(arrayWrapper, BorderLayout.NORTH);
-		
-		add(wrapper);
-
 		setExtendedState(JFrame.MAXIMIZED_BOTH );
-
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
 	}
 
 	// preDrawArray reinitializes the array of panels that represent the values. They are set based on the size of the window.
-	public void preDrawArray(int[] array){
+	public void initArray(int[] array) {
 		bucketWrapper = new JPanel[10];
-		squarePanels = new JPanel[BucketSortingVisualizer.sortDataCount];
+		pillar = new JPanel[BucketSortingVisualizer.numberOfElements];
 		bucketPanels = new JPanel[10];
 		bucketWrapper = new JPanel[10];
-		bucketArray = new JPanel[10][BucketSortingVisualizer.sortDataCount];
+		bucketArray = new JPanel[10][BucketSortingVisualizer.numberOfElements];
 		allBucketWrapper.setLayout(new GridLayout(10, 1, 20, 5));
 		
 		JLabel x;
-		arrayWrapper.removeAll();
+		bottom.removeAll();
 		allBucketWrapper.removeAll();
 
-		for(int i = 0; i < BucketSortingVisualizer.sortDataCount; i++){
-			squarePanels[i] = new JPanel();
-			squarePanels[i].setPreferredSize(new Dimension(30, 30));
-			squarePanels[i].setBackground(Color.black);
-			squarePanels[i].setLayout(new GridBagLayout()); 
+		for(int i = 0; i < BucketSortingVisualizer.numberOfElements; i++){
+			pillar[i] = new JPanel();
+			pillar[i].setPreferredSize(new Dimension(30, 30));
+			pillar[i].setBackground(Color.black);
+			pillar[i].setLayout(new GridBagLayout()); 
 			
 			x = new JLabel(Integer.toString(array[i]));
 			x.setForeground(Color.white);
-			squarePanels[i].add(x);
+			pillar[i].add(x);
 			
-			arrayWrapper.add(squarePanels[i], c);
+			bottom.add(pillar[i], c);
 		}
 		
 		for(int i = 0; i < 10; i++){
 			// BucketWrapper
 			bucketWrapper[i] = new JPanel();
 			bucketWrapper[i].setLayout(new GridBagLayout()); 
+			bucketWrapper[i].setBackground(Color.BLACK);
 			
 			// ID panel of bucket
 			bucketPanels[i] = new JPanel();
 			bucketPanels[i].setPreferredSize(new Dimension(50, 50));
-			bucketPanels[i].setBackground(Color.blue);
+			bucketPanels[i].setBackground(Color.BLACK);
 			bucketPanels[i].setLayout(new GridBagLayout()); 			
 			x = new JLabel(Integer.toString(i));
 			x.setForeground(Color.white);
@@ -166,43 +198,53 @@ public class VisualizerFrame extends JFrame {
 		validate();
 	}
 	
-	public void reDrawArray(int[] array, int workingItemArray, int[][] bucket, int[] bucketSize, int workingBucket, int workingItemBucket){
+	public void arraySwitch(int[] array, int workingItemArray, int[][] bucket, int[] bucketSize, int workingBucket, int workingItemBucket){
 		allBucketWrapper.removeAll();
-		arrayWrapper.removeAll();
-		
+		bottom.removeAll();
 		JLabel x;
 		
-		for(int i = 0; i < BucketSortingVisualizer.sortDataCount; i++){
-			squarePanels[i] = new JPanel();
-			squarePanels[i].setPreferredSize(new Dimension(30, 30));
-			squarePanels[i].setLayout(new GridBagLayout()); 
+		for(int i = 0; i < BucketSortingVisualizer.numberOfElements; i++){
+			pillar[i] = new JPanel();
+			pillar[i].setPreferredSize(new Dimension(30, 30));
+			pillar[i].setLayout(new GridBagLayout()); 
 			
 			x = new JLabel(Integer.toString(array[i]));
 			x.setForeground(Color.white);
-			squarePanels[i].add(x);
-			if (i == workingItemArray){
-				squarePanels[i].setBackground(Color.green);
-			}else{
-				squarePanels[i].setBackground(Color.black);
+			
+			pillar[i].add(x);
+			
+			if (i == workingItemArray) {
+				pillar[i].setBackground(Color.green);
+			} else {
+				pillar[i].setBackground(Color.black);
 			}
-			arrayWrapper.add(squarePanels[i], c);
+			
+			bottom.add(pillar[i], c);
 		}
 		
 		for(int i = 0; i < 10; i++){
 			// BucketWrapper
 			bucketWrapper[i] = new JPanel();
 			bucketWrapper[i].setLayout(new GridBagLayout()); 
+			bucketWrapper[i].setBackground(Color.BLACK);
 			
 			// ID panel of bucket
 			bucketPanels[i] = new JPanel();
 			bucketPanels[i].setPreferredSize(new Dimension(50, 50));
+			bucketPanels[i].setBackground(Color.BLACK);
+
 			if(i == workingBucket) {
 				bucketPanels[i].setBackground(Color.red);
-			} else bucketPanels[i].setBackground(Color.blue);
+			} else {
+				bucketPanels[i].setBackground(Color.blue);
+			}
+			
 			bucketPanels[i].setLayout(new GridBagLayout()); 	
+			bucketPanels[i].setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 10, 10, 10)));
 			
 			x = new JLabel(Integer.toString(i));
 			x.setForeground(Color.white);
+			
 			bucketPanels[i].add(x);
 			
 			bucketWrapper[i].add(bucketPanels[i], c);
@@ -211,15 +253,20 @@ public class VisualizerFrame extends JFrame {
 			for(int j = 0; j < bucketSize[i]; j++) {
 				bucketArray[i][j] = new JPanel();
 				bucketArray[i][j].setPreferredSize(new Dimension(30, 30));
-				if(i == workingBucket && j == workingItemBucket) bucketArray[i][j].setBackground(Color.green);
-				else if(i == workingBucket && j == bucketSize[i] - 1 && workingItemArray != -1 && workingItemBucket == -1) {
+				if (i == workingBucket && j == workingItemBucket) {
 					bucketArray[i][j].setBackground(Color.green);
-				} else bucketArray[i][j].setBackground(Color.black);
+				} else if (i == workingBucket && j == bucketSize[i] - 1 && workingItemArray != NULL_ELEMENT && workingItemBucket == NULL_ELEMENT) {
+					bucketArray[i][j].setBackground(Color.green);
+				} else {
+					bucketArray[i][j].setBackground(Color.white);
+				}
 				
+				bucketArray[i][j].setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 10, 10, 10)));
 				bucketArray[i][j].setLayout(new GridBagLayout());
 				
 				x = new JLabel(Integer.toString(bucket[i][j]));
-				x.setForeground(Color.white);
+				x.setForeground(Color.black);
+				
 				bucketArray[i][j].add(x);
 				
 				bucketWrapper[i].add(bucketArray[i][j], c);
