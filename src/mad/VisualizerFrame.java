@@ -1,90 +1,143 @@
 package mad;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-@SuppressWarnings("serial")
 public class VisualizerFrame extends JFrame {
+	private static final long serialVersionUID = 1L;
+	
+	private final int MAX_SPEED 	= 1000;
+	private final int MIN_SPEED 	= 1;
+	private final int DEFAULT_SPEED = 50;
+	
+	private final int MAX_SIZE 		= 500;
+	private final int MIN_SIZE 		= 1;
+	private final int DEFAULT_SIZE 	= 40;
 
-	private final int MAX_SPEED = 1000;
-	private final int MIN_SPEED = 1;
-	private final int MAX_SIZE = 500;
-	private final int MIN_SIZE = 1;
-	private final int DEFAULT_SPEED = 20;
-	private final int DEFAULT_SIZE = 100;
+	private final String[] Sorts = {"Bubble Sort", "Selection Sort", "Merge Sort"};
 
-	private final String[] Sorts = {"Bubble", "Selection", "Insertion", "Gnome", "Merge", "Radix LSD", "Radix MSD", "Shell", "Quandrix", "Bubble(fast)", "Selection(fast)", "Insertion(fast)", "Gnome(fast)"};
+	private int pillarHeight;
 
-	private int sizeModifier;
+	private JPanel 				wrapper;
+	private JPanel 				right;
+	private JPanel 				left;
+	private JPanel[] 			squarePanels;
+	public	JButton 			start;
+	private JComboBox<String> 	selection;
+	private JSlider 			speed;
+	public  JSlider 			size;
+	private JLabel 				speedVal;
+	private JLabel 				sizeVal;
+	private GridBagConstraints 	c;
 
-	private JPanel wrapper;
-	private JPanel arrayWrapper;
-	private JPanel buttonWrapper;
-	private JPanel[] squarePanels;
-	private JButton start;
-	private JComboBox<String> selection;
-	private JSlider speed;
-	private JSlider size;
-	private JLabel speedVal;
-	private JLabel sizeVal;
-	private GridBagConstraints c;
-	private JCheckBox stepped;
+	public VisualizerFrame() {
+		// LEFT CONTAINER -----------------------------------------------------------------------
+		TitledBorder buttonWrapperTitle = BorderFactory.createTitledBorder("FUNCTIONAL AREA");
+		buttonWrapperTitle.setTitleJustification(TitledBorder.CENTER);
+		buttonWrapperTitle.setTitleColor(Color.WHITE);
+		
+		left = new JPanel();
+		left.setLayout(new FlowLayout());
+		left.setBackground(Color.BLACK);
+		left.setBorder(new CompoundBorder(buttonWrapperTitle, new EmptyBorder(10, 10, 10, 10)));
 
-	public VisualizerFrame(){
-		super("Sorting Visualizer");
+		selection 	= new JComboBox<String>();
+		start 		= new JButton("Start");
+		speed 		= new JSlider(MIN_SPEED, MAX_SPEED, DEFAULT_SPEED);
+		size 		= new JSlider(MIN_SIZE, MAX_SIZE, DEFAULT_SIZE);
+		speedVal 	= new JLabel("Speed: 50 ms");
+		sizeVal 	= new JLabel("Size: 40 values");
 
-		start = new JButton("Start");
-		buttonWrapper = new JPanel();
-		arrayWrapper = new JPanel();
+		start.setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 30, 10, 30)));
+		start.setBackground(Color.BLACK);
+		start.setForeground(Color.WHITE);
+
+		for (String s: Sorts) {	selection.addItem(s); }
+		selection.setBorder(new EmptyBorder(10, 30, 10, 30));
+		selection.setBackground(Color.BLACK);
+		selection.setForeground(Color.WHITE);
+
+		speed.setBorder(new EmptyBorder(10, 30, 10, 30));
+		speed.setPaintTicks(false);
+		
+		speedVal.setForeground(Color.WHITE);
+		
+		size.setPaintTicks(false);
+		size.setBorder(new EmptyBorder(10, 30, 10, 30));
+
+		sizeVal.setForeground(Color.WHITE);
+		size.setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 50, 10, 10)));
+
+		left.add(speedVal);
+		left.add(speed);
+		left.add(sizeVal);
+		left.add(size);
+		left.add(start);
+		left.add(selection);
+
+		// RIGHT CONTAINER --------------------------------------------------------------
+		right = new JPanel();
+		right.setLayout(new GridBagLayout());
+		right.setBorder(new EmptyBorder(10, 40, 10, 10));
+		right.setBackground(Color.BLACK);
+				
+		TitledBorder arrayWrapperTitle = BorderFactory.createTitledBorder("SORTING AREA");
+		arrayWrapperTitle.setTitleJustification(TitledBorder.CENTER);
+		arrayWrapperTitle.setTitleColor(Color.WHITE);
+		right.setBorder(new CompoundBorder(arrayWrapperTitle , new EmptyBorder(10, 10, 10, 10)));
+		
+		c 		 = new GridBagConstraints();
+		c.insets = new Insets(0, 1, 0, 1);
+		c.anchor = GridBagConstraints.SOUTH;		
+		
+		// WRAPPER ----------------------------------------------------------------------
 		wrapper = new JPanel();
-		selection = new JComboBox<String>();
-		speed = new JSlider(MIN_SPEED, MAX_SPEED, DEFAULT_SPEED);
-		size = new JSlider(MIN_SIZE, MAX_SIZE, DEFAULT_SIZE);
-		speedVal = new JLabel("Speed: 20 ms");
-		sizeVal = new JLabel("Size: 100 values");
-		stepped = new JCheckBox("Stepped Values");
-		c = new GridBagConstraints();
-
-		for(String s : Sorts) selection.addItem(s);
-
-		arrayWrapper.setLayout(new GridBagLayout());
-		wrapper.setLayout(new BorderLayout());
-
-		c.insets = new Insets(0,1,0,1);
-		c.anchor = GridBagConstraints.SOUTH;
-
+		wrapper.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		wrapper.setBorder(new EmptyBorder(20, 20, 20, 20));
+		wrapper.setBackground(Color.BLACK);
+		
+		wrapper.add(left);
+		wrapper.add(right);	
+		add(wrapper);
+		this.setTitle("MAD Lions' Sorting Algorithms Visualization");
+		
+		// ACTION LISTENERS --------------------------------------------------------------
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SortingVisualizer.startSort((String) selection.getSelectedItem());
+				if (!SortingVisualizer.isSorting) {
+					SortingVisualizer.startSort((String) selection.getSelectedItem());
+					size.setEnabled(false);
+				} 
 			}
 		});
-
-		stepped.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SortingVisualizer.stepped = stepped.isSelected();
+		
+		size.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				sizeVal.setText(("Size: " + Integer.toString(size.getValue()) + " values"));
+				validate();
+				SortingVisualizer.sortDataCount = size.getValue();
 			}
 		});
-
-		speed.setMinorTickSpacing(10);
-		speed.setMajorTickSpacing(100);
-		speed.setPaintTicks(true);
 
 		speed.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -94,75 +147,22 @@ public class VisualizerFrame extends JFrame {
 			}
 		});
 
-		size.setMinorTickSpacing(10);
-		size.setMajorTickSpacing(100);
-		size.setPaintTicks(true);
-
-		size.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				sizeVal.setText(("Size: " + Integer.toString(size.getValue()) + " values"));
-				validate();
-				SortingVisualizer.sortDataCount = size.getValue();
-			}
-		});
-
-		buttonWrapper.add(stepped);
-		buttonWrapper.add(speedVal);
-		buttonWrapper.add(speed);
-		buttonWrapper.add(sizeVal);
-		buttonWrapper.add(size);
-		buttonWrapper.add(start);
-		buttonWrapper.add(selection);
-
-		wrapper.add(buttonWrapper, BorderLayout.SOUTH);
-		wrapper.add(arrayWrapper);
-
-		add(wrapper);
-
 		setExtendedState(JFrame.MAXIMIZED_BOTH );
-
-		addComponentListener(new ComponentListener() {
-
-			@Override
-			public void componentResized(ComponentEvent e) {
-				// Reset the sizeModifier
-				// 90% of the windows height, divided by the size of the sorted array.
-				sizeModifier = (int) ((getHeight()*0.9)/(squarePanels.length));
-			}
-
-			@Override
-			public void componentMoved(ComponentEvent e) {
-				// Do nothing
-			}
-
-			@Override
-			public void componentShown(ComponentEvent e) {
-				// Do nothing
-			}
-
-			@Override
-			public void componentHidden(ComponentEvent e) {
-				// Do nothing
-			}
-
-		});
-
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
 	}
 
 	// preDrawArray reinitializes the array of panels that represent the values. They are set based on the size of the window.
 	public void preDrawArray(Integer[] squares){
 		squarePanels = new JPanel[SortingVisualizer.sortDataCount];
-		arrayWrapper.removeAll();
-		// 90% of the windows height, divided by the size of the sorted array.
-		sizeModifier =  (int) ((getHeight()*0.9)/(squarePanels.length));
-		for(int i = 0; i<SortingVisualizer.sortDataCount; i++){
+		right.removeAll();
+		// 70% of the windows height, divided by the size of the sorted array.
+		pillarHeight =  (int) ((getHeight()*0.7)/(squarePanels.length));
+		for(int i = 0; i < SortingVisualizer.sortDataCount; i++){
 			squarePanels[i] = new JPanel();
-			squarePanels[i].setPreferredSize(new Dimension(SortingVisualizer.blockWidth, squares[i]*sizeModifier));
-			squarePanels[i].setBackground(Color.blue);
-			arrayWrapper.add(squarePanels[i], c);
+			squarePanels[i].setPreferredSize(new Dimension(SortingVisualizer.blockWidth, squares[i] * pillarHeight));
+			squarePanels[i].setBackground(Color.green);
+			right.add(squarePanels[i], c);
 		}
 		repaint();
 		validate();
@@ -182,20 +182,20 @@ public class VisualizerFrame extends JFrame {
 
 	// reDrawArray does similar to preDrawArray except it does not reinitialize the panel array.
 	public void reDrawArray(Integer[] squares, int working, int comparing, int reading){
-		arrayWrapper.removeAll();
-		for(int i = 0; i<squarePanels.length; i++){
+		right.removeAll();
+		for(int i = 0; i < squarePanels.length; i++){
 			squarePanels[i] = new JPanel();
-			squarePanels[i].setPreferredSize(new Dimension(SortingVisualizer.blockWidth, squares[i]*sizeModifier));
+			squarePanels[i].setPreferredSize(new Dimension(SortingVisualizer.blockWidth, squares[i] * pillarHeight));
 			if (i == working){
-				squarePanels[i].setBackground(Color.green);
+				squarePanels[i].setBackground(Color.blue);
 			}else if(i == comparing){
 				squarePanels[i].setBackground(Color.red);
 			}else if(i == reading){
-				squarePanels[i].setBackground(Color.yellow);
+				squarePanels[i].setBackground(Color.white);
 			}else{
-				squarePanels[i].setBackground(Color.blue);
+				squarePanels[i].setBackground(Color.green);
 			}
-			arrayWrapper.add(squarePanels[i], c);
+			right.add(squarePanels[i], c);
 		}
 		repaint();
 		validate();

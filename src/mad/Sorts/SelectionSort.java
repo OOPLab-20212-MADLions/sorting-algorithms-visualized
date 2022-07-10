@@ -6,56 +6,29 @@ public class SelectionSort implements Runnable{
 	
 	private Integer[] toBeSorted;
 	private VisualizerFrame frame;
-	private boolean fast;
 	
-	public SelectionSort(Integer[] toBeSorted, VisualizerFrame frame, boolean fast) {
+	public SelectionSort(Integer[] toBeSorted, VisualizerFrame frame) {
 		this.toBeSorted = toBeSorted;
 		this.frame = frame;
-		this.fast = fast;
 	}
 	
 	public void run() {
-		if (fast) {
-			sortFast();
-		} else {
-			sortSlow();
-		}
-		SortingVisualizer.isSorting=false;
+		sort();
+		SortingVisualizer.isSorting = false;
+		SortingVisualizer.frame.size.setEnabled(true);
+		SortingVisualizer.frame.start.setText("Start");
 	}
-	
-	public void sortFast(){
+		
+	public void sort() {
 		int temp = 0;
 		int selected = 0;
-		for(int i = 0; i<toBeSorted.length; i++){
+		for (int i = 0; i < toBeSorted.length; i++){
 			selected = i;
-			for(int j = toBeSorted.length-1; j>i; j--){
-				if (toBeSorted[j] <= toBeSorted[selected]){
-					selected = j;
-				}				
-			}
-			frame.reDrawArray(toBeSorted);
-			try {
-				Thread.sleep(SortingVisualizer.sleep);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			temp = toBeSorted[i];
-			toBeSorted[i] = toBeSorted[selected];
-			toBeSorted[selected]= temp;
-		}
-	}
-	
-	public void sortSlow() {
-		int temp = 0;
-		int selected = 0;
-		for(int i = 0; i<toBeSorted.length; i++){
-			selected = i;
-			for(int j = toBeSorted.length-1; j>i; j--){
-				
+			for(int j = toBeSorted.length - 1; j > i; j--){
 				if (toBeSorted[j] <= toBeSorted[selected]){
 					selected = j;
 				}
-				frame.reDrawArray(toBeSorted, selected, j-1);
+				frame.reDrawArray(toBeSorted, selected, j - 1);
 				try {
 					Thread.sleep(SortingVisualizer.sleep);
 				} catch (InterruptedException e) {
@@ -64,7 +37,7 @@ public class SelectionSort implements Runnable{
 			}
 			temp = toBeSorted[i];
 			toBeSorted[i] = toBeSorted[selected];
-			toBeSorted[selected]= temp;
+			toBeSorted[selected] = temp;
 		}
 		frame.reDrawArray(toBeSorted);
 	}
