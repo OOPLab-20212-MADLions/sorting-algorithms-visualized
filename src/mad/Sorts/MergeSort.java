@@ -9,6 +9,7 @@ public class MergeSort implements Runnable {
 		mergeSort(arr);
 		SortingVisualizer.isSorting = false;
 		SortingVisualizer.frame.size.setEnabled(true);
+		SortingVisualizer.frame.selection.setEnabled(true);
 		SortingVisualizer.frame.start.setText("Start");
 	}
 	

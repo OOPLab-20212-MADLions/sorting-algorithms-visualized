@@ -15,6 +15,7 @@ public class BubbleSort implements Runnable {
 		sort();
 		SortingVisualizer.isSorting = false;
 		SortingVisualizer.frame.size.setEnabled(true);
+		SortingVisualizer.frame.selection.setEnabled(true);
 		SortingVisualizer.frame.start.setText("Start");
 	}
 

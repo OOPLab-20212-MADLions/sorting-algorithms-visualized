@@ -1,5 +1,6 @@
 package mad;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -44,7 +45,7 @@ public class VisualizerFrame extends JFrame {
 	private JPanel 				right;
 	private JPanel[] 			pillar;
 	public	JButton 			start;
-	private JComboBox<String> 	selection;
+	public	JComboBox<String> 	selection;
 	private JSlider 			delay;
 	public  JSlider 			size;
 	private JLabel 				delayVal;
@@ -89,10 +90,9 @@ public class VisualizerFrame extends JFrame {
 		sizeVal.setForeground(Color.WHITE);
 		size.setBorder(new CompoundBorder(new LineBorder(null), new EmptyBorder(10, 50, 10, 10)));
 		
-		left.add(start);
-		left.add(selection);
 		left.add(delayVal);
 		left.add(delay);
+		left.add(selection);
 		left.add(sizeVal);
 		left.add(size);
 
@@ -113,12 +113,14 @@ public class VisualizerFrame extends JFrame {
 		
 		// WRAPPER ----------------------------------------------------------------------
 		wrapper = new JPanel();
-		wrapper.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+//		wrapper.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		wrapper.setLayout(new BorderLayout());
 		wrapper.setBorder(new EmptyBorder(20, 20, 20, 20));
 		wrapper.setBackground(Color.BLACK);
 		
-		wrapper.add(left);
-		wrapper.add(right);	
+		wrapper.add(left, BorderLayout.NORTH);
+		wrapper.add(right, BorderLayout.CENTER);	
+		wrapper.add(start, BorderLayout.SOUTH);
 		add(wrapper);
 		this.setTitle("MAD Lions' Sorting Algorithms Visualization");
 		
@@ -128,6 +130,7 @@ public class VisualizerFrame extends JFrame {
 				if (!SortingVisualizer.isSorting) {
 					SortingVisualizer.startSort((String) selection.getSelectedItem());
 					size.setEnabled(false);
+					selection.setEnabled(false);
 				} 
 			}
 		});
@@ -156,7 +159,7 @@ public class VisualizerFrame extends JFrame {
 	public void initArray(Integer[] elements){
 		pillar = new JPanel[SortingVisualizer.numberOfElements];
 		right.removeAll();
-		pillarHeight =  (int) ((getHeight() * 0.7) / (pillar.length));
+		pillarHeight =  (int) ((getHeight() * 0.5) / (pillar.length));
 		for(int i = 0; i < SortingVisualizer.numberOfElements; i++){
 			pillar[i] = new JPanel();
 			pillar[i].setPreferredSize(new Dimension(SortingVisualizer.pillarWidth, elements[i] * pillarHeight));
